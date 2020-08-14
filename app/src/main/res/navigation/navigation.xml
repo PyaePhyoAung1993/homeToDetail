@@ -20,8 +20,9 @@
         android:name="com.azp.newsapp.ui.DetailFragment"
         android:label="fragment_detail"
         tools:layout="@layout/fragment_detail" >
+
         <argument
-            android:name="articleUrl"
-            app:argType="string" />
+            android:name="movieId"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -1,6 +1,7 @@
 package com.azp.newsapp.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,15 +11,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.azp.newsapp.R
-import com.azp.newsapp.model.Article
-import com.azp.newsapp.ui.adapter.HomeAdapter
-import com.azp.newsapp.viewmodel.NewsViewmodel
+import com.azp.newsapp.model.Result
+import com.azp.newsapp.ui.adapter.MovieAdapter
+import com.azp.newsapp.viewmodel.MovieIdViewModel
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment(), HomeAdapter.ClickListener {
+class HomeFragment : Fragment(), MovieAdapter.ClickListener {
 
-    lateinit var newsViewmodel: NewsViewmodel
-    lateinit var homeAdapter: HomeAdapter
+    lateinit var newsViewmodel: MovieIdViewModel
+    lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,21 +33,21 @@ class HomeFragment : Fragment(), HomeAdapter.ClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         newsViewmodel = ViewModelProvider(this)
-            .get(NewsViewmodel::class.java)
+            .get(MovieIdViewModel::class.java)
 
-        homeAdapter = HomeAdapter()
+        movieAdapter = MovieAdapter()
         recyclerHome.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = homeAdapter
+            adapter = movieAdapter
         }
-        homeAdapter.setOnClickListener(this)
+        movieAdapter.setOnClickListener(this)
         observeViewmodel()
     }
 
     private fun observeViewmodel() {
         newsViewmodel.getResult().observe(
             viewLifecycleOwner, Observer { news ->
-                homeAdapter.updateArticle(news.articles)
+                movieAdapter.updateArticle(news.results)
             }
         )
     }
@@ -56,10 +57,11 @@ class HomeFragment : Fragment(), HomeAdapter.ClickListener {
         newsViewmodel.loadNews()
     }
 
-    override fun onClcik(article: Article) {
+    override fun onClcik(result: Result) {
 //        findNavController().navigate(R.id.action_homeFragment_to_detailFragment)
+        Log.d("movie",result.id.toString())
         var action = HomeFragmentDirections
-            .actionHomeFragmentToDetailFragment(article.url)
+            .actionHomeFragmentToDetailFragment(result.id)
         findNavController().navigate(action)
     }
 
